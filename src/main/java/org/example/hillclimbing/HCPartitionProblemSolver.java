@@ -1,4 +1,4 @@
-package org.example.HillClimbing;
+package org.example.hillclimbing;
 
 import org.example.CommonFunctionsUtil;
 
