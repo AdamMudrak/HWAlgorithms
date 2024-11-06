@@ -1,5 +1,7 @@
 package org.example.HillClimbing;
 
+import org.example.CommonFunctionsUtil;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
@@ -22,14 +24,13 @@ public class HCPartitionProblemSolver {
     }
 
     private int hillClimb() {
-        boolean[] partition = generateRandomPartition();
-        int currentDifference = calculateDifference(partition);
-
+        boolean[] partition = CommonFunctionsUtil.generateRandomPartition(set, random);
+        int currentDifference = CommonFunctionsUtil.calculateDifference(set, partition);
         while (true) {
             boolean improved = false;
             for (int i = 0; i < set.length; i++) {
                 partition[i] = !partition[i];
-                int newDifference = calculateDifference(partition);
+                int newDifference = CommonFunctionsUtil.calculateDifference(set, partition);
                 if (newDifference < currentDifference) {
                     currentDifference = newDifference;
                     improved = true;
@@ -39,27 +40,6 @@ public class HCPartitionProblemSolver {
             }
             if (!improved) break;
         }
-
         return currentDifference;
-    }
-
-    private boolean[] generateRandomPartition() {
-        boolean[] partition = new boolean[set.length];
-        for (int i = 0; i < set.length; i++) {
-            partition[i] = random.nextBoolean();
-        }
-        return partition;
-    }
-
-    private int calculateDifference(boolean[] partition) {
-        int sumA = 0, sumB = 0;
-        for (int i = 0; i < set.length; i++) {
-            if (partition[i]) {
-                sumA += set[i];
-            } else {
-                sumB += set[i];
-            }
-        }
-        return Math.abs(sumA - sumB);
     }
 }
