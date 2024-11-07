@@ -1,4 +1,4 @@
-package org.example;
+package org.example.util;
 
 import java.util.Random;
 
@@ -12,7 +12,8 @@ public class CommonFunctionsUtil {
     }
 
     public static int calculateDifference(int[] set, boolean[] partition) {
-        int sumA = 0, sumB = 0;
+        int sumA = 0;
+        int sumB = 0;
         for (int i = 0; i < set.length; i++) {
             if (partition[i]) {
                 sumA += set[i];
