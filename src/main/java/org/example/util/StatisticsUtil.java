@@ -1,9 +1,9 @@
-package org.example;
+package org.example.util;
 
 import java.util.Collections;
 import java.util.List;
 
-public class Statistics {
+public class StatisticsUtil {
 
     public void analyzeResults(List<Integer> solutions) {
         int bestSolution = Collections.min(solutions);

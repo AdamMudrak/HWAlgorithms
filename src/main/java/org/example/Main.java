@@ -1,13 +1,13 @@
 package org.example;
 
-import static org.example.HcIterationDb.hillClimbIterationSolutions;
-import static org.example.constants.Constants.HC_ALGORITHMS_CALLS;
-import static org.example.constants.Constants.SA_ALGORITHMS_CALLS;
+import static org.example.hillclimbing.HcIterationDb.hillClimbIterationSolutions;
 
 import java.util.List;
 import java.util.stream.Collectors;
 import org.example.hillclimbing.HcPartitionProblemSolver;
 import org.example.simulatedannealing.SaPartitionProblemSolver;
+import org.example.util.ChartBuilderUtil;
+import org.example.util.StatisticsUtil;
 
 public class Main {
     private static final int[] DATA_TO_TEST_AGAINST = {1, 2, 3, 9, 8, 7, 6, 5, 4};
@@ -20,18 +20,19 @@ public class Main {
     private static void hcExperimentRunner() {
         HcPartitionProblemSolver solver = new HcPartitionProblemSolver(DATA_TO_TEST_AGAINST);
 
-        Statistics hcExperiment = new Statistics();
+        StatisticsUtil hcExperiment = new StatisticsUtil();
 
-        List<Integer> solutions = solver.multiStartHillClimb(HC_ALGORITHMS_CALLS);
-        ChartBuilder.build(hillClimbIterationSolutions,"Графік збіжності Hill Climb");
-        ChartBuilder.buildHistograms(solutions.stream()
+        List<Integer> solutions = solver.multiStartHillClimb(100);
+        ChartBuilderUtil.build(hillClimbIterationSolutions,"Графік збіжності Hill Climb");
+        ChartBuilderUtil.buildHistograms(solutions.stream()
                 .collect(Collectors.groupingBy(e -> e, Collectors.counting())));
         hcExperiment.analyzeResults(solutions);
     }
 
     private static void saExperimentRunner() {
         SaPartitionProblemSolver solver = new SaPartitionProblemSolver(DATA_TO_TEST_AGAINST);
-        solver.multiStartSimulatedAnnealing(SA_ALGORITHMS_CALLS);
-        ChartBuilder.build(solver.getIterationSolutions(), "Графік збіжності Simulated Annealing");
+        solver.multiStartSimulatedAnnealing(1);
+        ChartBuilderUtil.build(solver.getIterationSolutions(),
+                "Графік збіжності Simulated Annealing");
     }
 }

@@ -1,6 +1,6 @@
 package org.example.hillclimbing;
 
-import static org.example.HcIterationDb.hillClimbIterationSolutions;
+import static org.example.hillclimbing.HcIterationDb.hillClimbIterationSolutions;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -8,7 +8,6 @@ import java.util.Random;
 import org.example.util.CommonFunctionsUtil;
 
 public class HcPartitionProblemSolver {
-
     private final int[] set;
     private final Random random = new Random();
 
