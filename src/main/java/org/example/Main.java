@@ -1,46 +1,39 @@
 package org.example;
 
-import org.example.hillclimbing.HCExperiment;
-import org.example.hillclimbing.HCPartitionProblemSolver;
-import org.example.simulatedannealing.SAExperiment;
-import org.example.simulatedannealing.SAPartitionProblemSolver;
+import static org.example.constants.Constants.ANSI_PURPLE;
+import static org.example.constants.Constants.ANSI_RESET;
+import static org.example.constants.Constants.HC_ALGORITHMS_CALLS;
+import static org.example.constants.Constants.SA_ALGORITHMS_CALLS;
 
 import java.util.List;
-
-import static org.example.constants.ConsoleColoursConstants.ANSI_RED;
-import static org.example.constants.ConsoleColoursConstants.ANSI_RESET;
+import org.example.hillclimbing.HcPartitionProblemSolver;
+import org.example.simulatedannealing.SaPartitionProblemSolver;
 
 public class Main {
     private static final int[] DATA_TO_TEST_AGAINST = {1, 2, 3, 9, 8, 7, 6, 5, 4};
-    private static final int ALGORITHMS_CALLS = 100;
-    private static final int PROGRAMME_RESTART_IMITATION = 3;
 
     public static void main(String[] args) {
-        System.out.println(ANSI_RED + "Hill Climbing" + ANSI_RESET);
+        System.out.println(ANSI_PURPLE + "Hill Climbing" + ANSI_RESET);
         hcExperimentRunner();
-        System.out.println(ANSI_RED + "SimulatedAnnealing" + ANSI_RESET);
+        System.out.println(ANSI_PURPLE + "SimulatedAnnealing" + ANSI_RESET);
         saExperimentRunner();
     }
 
     private static void hcExperimentRunner() {
-        HCPartitionProblemSolver solver = new HCPartitionProblemSolver(DATA_TO_TEST_AGAINST);
+        HcPartitionProblemSolver solver = new HcPartitionProblemSolver(DATA_TO_TEST_AGAINST);
 
-        HCExperiment hcExperiment = new HCExperiment();
+        Experiment hcExperiment = new Experiment();
 
-        for (int i = 0; i < PROGRAMME_RESTART_IMITATION; i++) {
-            List<Integer> solutions = solver.multiStartHillClimb(ALGORITHMS_CALLS);
-            hcExperiment.analyzeResults(solutions);
-        }
+        List<Integer> solutions = solver.multiStartHillClimb(HC_ALGORITHMS_CALLS);
+        hcExperiment.analyzeResults(solutions);
     }
 
     private static void saExperimentRunner() {
-        SAPartitionProblemSolver solver = new SAPartitionProblemSolver(DATA_TO_TEST_AGAINST);
+        SaPartitionProblemSolver solver = new SaPartitionProblemSolver(DATA_TO_TEST_AGAINST);
 
-        SAExperiment saExperiment = new SAExperiment();
+        Experiment saExperiment = new Experiment();
 
-        for (int i = 0; i < PROGRAMME_RESTART_IMITATION; i++) {
-            List<Integer> solutions = solver.multiStartSimulatedAnnealing(ALGORITHMS_CALLS);
-            saExperiment.analyzeResults(solutions);
-        }
+        List<Integer> solutions = solver.multiStartSimulatedAnnealing(SA_ALGORITHMS_CALLS);
+        saExperiment.analyzeResults(solutions);
     }
 }
