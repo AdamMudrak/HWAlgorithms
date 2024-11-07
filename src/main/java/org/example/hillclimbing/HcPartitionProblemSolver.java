@@ -3,6 +3,7 @@ package org.example.hillclimbing;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
+import org.example.AlgorithmType;
 import org.example.util.CommonFunctionsUtil;
 import org.example.util.PrinterUtil;
 
@@ -32,7 +33,8 @@ public class HcPartitionProblemSolver {
         boolean[] partition = CommonFunctionsUtil.generateRandomPartition(set, random);
 
         int currentDifference = CommonFunctionsUtil.calculateDifference(set, partition);
-        PrinterUtil.printInitialDifference(currentDifference, solutionCounter);
+        PrinterUtil.printInitialDifference(currentDifference, solutionCounter,
+                AlgorithmType.HillClimbing);
 
         boolean notImproved = true;
 
@@ -46,7 +48,8 @@ public class HcPartitionProblemSolver {
 
                 if (newDifference < currentDifference) {
                     currentDifference = newDifference;
-                    PrinterUtil.printImprovedDifference(currentDifference, solutionCounter);
+                    PrinterUtil.printImprovedDifference(currentDifference, solutionCounter,
+                            AlgorithmType.HillClimbing);
 
                     notImproved = false;
                     improved = true;
@@ -59,7 +62,7 @@ public class HcPartitionProblemSolver {
             }
         }
         if (notImproved) {
-            PrinterUtil.notImprovedPrinter(solutionCounter);
+            PrinterUtil.notImprovedPrinter(solutionCounter, AlgorithmType.HillClimbing);
         }
         return currentDifference;
     }
