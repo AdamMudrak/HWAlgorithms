@@ -4,30 +4,27 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 import org.example.util.CommonFunctionsUtil;
-import org.example.util.PrinterUtil;
 
 public class SaPartitionProblemSolver {
+    private final List<Integer> iterationSolutions = new ArrayList<>();
     private final int[] set;
     private final Random random = new Random();
-    private int solutionCounter;
 
     public SaPartitionProblemSolver(int[] set) {
         this.set = set;
     }
 
-    public List<Integer> multiStartSimulatedAnnealing(int numStarts) {
-        solutionCounter = 1;
-        List<Integer> solutions = new ArrayList<>();
-        for (int i = 0; i < numStarts; i++) {
-            int result = simulatedAnnealing();
-            solutions.add(result);
-            solutionCounter++;
-        }
-        return solutions;
+    public List<Integer> getIterationSolutions() {
+        return iterationSolutions;
     }
 
-    private int simulatedAnnealing() {
-        PrinterUtil.printSpliterator();
+    public void multiStartSimulatedAnnealing(int numStarts) {
+        for (int i = 0; i < numStarts; i++) {
+            simulatedAnnealing();
+        }
+    }
+
+    private void simulatedAnnealing() {
 
         boolean[] partition = CommonFunctionsUtil.generateRandomPartition(set, random);
 
@@ -35,20 +32,16 @@ public class SaPartitionProblemSolver {
 
         double temperature = 10000;
         double coolingRate = 0.003;
-
         while (temperature > 1) {
             boolean[] newPartition = generateNeighborPartition(partition);
             int newDifference = CommonFunctionsUtil.calculateDifference(set, newPartition);
-
             if (shouldAcceptSolution(currentDifference, newDifference, temperature)) {
                 partition = newPartition;
                 currentDifference = newDifference;
+                iterationSolutions.add(currentDifference);
             }
-
             temperature *= (1 - coolingRate);
         }
-
-        return currentDifference;
     }
 
     private boolean[] generateNeighborPartition(boolean[] partition) {
