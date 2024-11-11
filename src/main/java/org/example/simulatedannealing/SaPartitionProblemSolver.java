@@ -6,41 +6,50 @@ import java.util.Random;
 import org.example.util.CommonFunctionsUtil;
 
 public class SaPartitionProblemSolver {
-    private final List<Integer> iterationSolutions = new ArrayList<>();
-    private final int[] set;
+    private final List<Double> iterationSolutions = new ArrayList<>();
+    private final double[] set;
     private final Random random = new Random();
 
-    public SaPartitionProblemSolver(int[] set) {
+    public SaPartitionProblemSolver(double[] set) {
         this.set = set;
     }
 
-    public List<Integer> getIterationSolutions() {
+    public List<Double> getIterationSolutions() {
         return iterationSolutions;
     }
 
-    public void multiStartSimulatedAnnealing(int numStarts) {
-        for (int i = 0; i < numStarts; i++) {
-            simulatedAnnealing();
-        }
-    }
-
-    private void simulatedAnnealing() {
-
+    public void simulatedAnnealing() {
         boolean[] partition = CommonFunctionsUtil.generateRandomPartition(set, random);
-
-        int currentDifference = CommonFunctionsUtil.calculateDifference(set, partition);
+        double currentDifference = CommonFunctionsUtil.calculateDifference(set, partition);
 
         double temperature = 10000;
         double coolingRate = 0.003;
-        while (temperature > 1) {
+        int accepted = 0;
+        int rejected = 0;
+        int rejectedInARow = 0;
+
+        int neighborhoodSize = set.length;
+
+        while (rejectedInARow < 3) {
             boolean[] newPartition = generateNeighborPartition(partition);
-            int newDifference = CommonFunctionsUtil.calculateDifference(set, newPartition);
+            double newDifference = CommonFunctionsUtil.calculateDifference(set, newPartition);
+
             if (shouldAcceptSolution(currentDifference, newDifference, temperature)) {
                 partition = newPartition;
                 currentDifference = newDifference;
+                accepted++;
+                rejectedInARow = 0;
                 iterationSolutions.add(currentDifference);
+            } else {
+                rejected++;
+                rejectedInARow++;
             }
-            temperature *= (1 - coolingRate);
+
+            if (accepted >= neighborhoodSize || rejected >= 2 * neighborhoodSize) {
+                temperature *= (1 - coolingRate);
+                accepted = 0;
+                rejected = 0;
+            }
         }
     }
 
@@ -51,7 +60,7 @@ public class SaPartitionProblemSolver {
         return newPartition;
     }
 
-    private boolean shouldAcceptSolution(int currentDifference, int newDifference,
+    private boolean shouldAcceptSolution(double currentDifference, double newDifference,
                                          double temperature) {
         if (newDifference < currentDifference) {
             return true;

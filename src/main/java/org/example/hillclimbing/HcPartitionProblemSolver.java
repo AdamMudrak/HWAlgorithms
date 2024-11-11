@@ -1,6 +1,6 @@
 package org.example.hillclimbing;
 
-import static org.example.hillclimbing.HcIterationDb.hillClimbIterationSolutions;
+import static org.example.hillclimbing.Db.hillClimbIterationSolutions;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -8,27 +8,27 @@ import java.util.Random;
 import org.example.util.CommonFunctionsUtil;
 
 public class HcPartitionProblemSolver {
-    private final int[] set;
+    private final double[] set;
     private final Random random = new Random();
 
-    public HcPartitionProblemSolver(int[] set) {
+    public HcPartitionProblemSolver(double[] set) {
         this.set = set;
     }
 
-    public List<Integer> multiStartHillClimb(int numStarts) {
-        List<Integer> solutions = new ArrayList<>();
+    public List<Double> multiStartHillClimb(int numStarts) {
+        List<Double> solutions = new ArrayList<>();
         for (int i = 0; i < numStarts; i++) {
-            int result = hillClimb();
+            double result = hillClimb();
             solutions.add(result);
         }
         return solutions;
     }
 
-    private int hillClimb() {
+    private double hillClimb() {
 
         boolean[] partition = CommonFunctionsUtil.generateRandomPartition(set, random);
 
-        int currentDifference = CommonFunctionsUtil.calculateDifference(set, partition);
+        double currentDifference = CommonFunctionsUtil.calculateDifference(set, partition);
 
         while (true) {
             boolean improved = false;
@@ -36,7 +36,7 @@ public class HcPartitionProblemSolver {
 
                 partition[i] = !partition[i];
 
-                int newDifference = CommonFunctionsUtil.calculateDifference(set, partition);
+                double newDifference = CommonFunctionsUtil.calculateDifference(set, partition);
 
                 if (newDifference < currentDifference) {
                     currentDifference = newDifference;

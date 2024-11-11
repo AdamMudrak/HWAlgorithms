@@ -13,11 +13,11 @@ import org.jfree.data.xy.XYSeriesCollection;
 
 public class ChartBuilderUtil {
 
-    public static void build(List<Integer> integers, String chartTitle) {
+    public static void build(List<Double> doubles, String chartTitle) {
 
         XYSeries series = new XYSeries("Різниця цільової функції");
-        for (int i = 0; i < integers.size(); i++) {
-            series.add(i + 1, integers.get(i));
+        for (int i = 0; i < doubles.size(); i++) {
+            series.add(i + 1, doubles.get(i));
         }
 
         XYSeriesCollection dataset = new XYSeriesCollection(series);
@@ -43,7 +43,7 @@ public class ChartBuilderUtil {
         frame.setVisible(true);
     }
 
-    public static void buildHistograms(Map<Integer, Long> frequencyMap) {
+    public static void buildHistograms(Map<Double, Long> frequencyMap) {
         DefaultCategoryDataset dataset = new DefaultCategoryDataset();
         frequencyMap.forEach((key, value) -> dataset.addValue(value, "Frequency", key.toString()));
         JFreeChart chart = ChartFactory.createBarChart(
