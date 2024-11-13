@@ -22,14 +22,16 @@ public class Main {
         StatisticsUtil hcExperiment = new StatisticsUtil();
 
         List<Double> solutions = solver.multiStartHillClimb(100);
-        ChartBuilderUtil.build(solver.getHillClimbIterationSolutions(),"Графік збіжності Hill Climb");
+        ChartBuilderUtil.build(solver.getHillClimbIterationSolutions(),
+                "Графік збіжності Hill Climb");
         ChartBuilderUtil.buildHistograms(solutions.stream()
                 .collect(Collectors.groupingBy(e -> e, Collectors.counting())));
         hcExperiment.analyzeResults(solutions);
     }
 
     private static void saExperimentRunner() {
-        SumPartitionSimulatedAnnealing simulatedAnnealing = new SumPartitionSimulatedAnnealing(HARD_VALUES);
+        SumPartitionSimulatedAnnealing simulatedAnnealing =
+                new SumPartitionSimulatedAnnealing(HARD_VALUES);
         System.out.println("Краще: " + simulatedAnnealing.simulatedAnnealing());
         ChartBuilderUtil.build(simulatedAnnealing.getAllSolutionCollector(),
                 "Графік збіжності Simulated Annealing");
