@@ -1,7 +1,6 @@
 package org.example;
 
 import static org.example.hillclimbing.Db.HARD_VALUES;
-import static org.example.hillclimbing.Db.SIMPLE_VALUES;
 
 import java.util.List;
 import java.util.stream.Collectors;
