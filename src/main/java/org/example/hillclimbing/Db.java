@@ -1,12 +1,8 @@
 package org.example.hillclimbing;
 
-import java.util.ArrayList;
-import java.util.List;
-
 public class Db {
-    public static final List<Double> hillClimbIterationSolutions = new ArrayList<>();
-
-    public static final double[] VALUES = {
+    public static final double[] SIMPLE_VALUES = {1.0, 9.0, 6.0, 2.0, 5.0, 4.0, 7.0, 8.0};
+    public static final double[] HARD_VALUES = {
             0.017889493,
             0.022513797,
             0.023541064,
