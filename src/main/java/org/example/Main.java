@@ -31,7 +31,9 @@ public class Main {
     private static void saExperimentRunner() {
         SumPartitionSimulatedAnnealing simulatedAnnealing = new SumPartitionSimulatedAnnealing(HARD_VALUES);
         System.out.println("Краще: " + simulatedAnnealing.simulatedAnnealing());
-        ChartBuilderUtil.build(simulatedAnnealing.getSolutionCollector(),
+        ChartBuilderUtil.build(simulatedAnnealing.getAllSolutionCollector(),
+                "Графік збіжності Simulated Annealing");
+        ChartBuilderUtil.build(simulatedAnnealing.getBestSolutionCollector(),
                 "Графік збіжності Simulated Annealing");
     }
 }

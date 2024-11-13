@@ -8,7 +8,8 @@ import java.util.Random;
 
 public class SumPartitionSimulatedAnnealing {
     public static final double ALPHA_COOLING_RATE = 0.995;
-    public final List<Double> solutionCollector = new ArrayList<>();
+    public final List<Double> allSolutionCollector = new ArrayList<>();
+    public final List<Double> bestSolutionCollector = new ArrayList<>();
     private final Random random = new Random();
     private final double[] set;
 
@@ -16,8 +17,11 @@ public class SumPartitionSimulatedAnnealing {
         this.set = set;
     }
 
-    public List<Double> getSolutionCollector() {
-        return solutionCollector;
+    public List<Double> getAllSolutionCollector() {
+        return allSolutionCollector;
+    }
+    public List<Double> getBestSolutionCollector() {
+        return bestSolutionCollector;
     }
 
     public double simulatedAnnealing() {
@@ -38,13 +42,14 @@ public class SumPartitionSimulatedAnnealing {
                 int counter = random.nextInt(0, set.length);
                 partition[counter] = !partition[counter];
                 double newDifference = CommonFunctionsUtil.calculateDifference(set, partition);
-                solutionCollector.add(newDifference);
+                allSolutionCollector.add(newDifference);
                 double delta = newDifference - currentDifference;
                 if (random.nextDouble() < Math.exp(-(delta / temperature))) {
                     currentDifference = newDifference;
                     if (newDifference < best) {
                         best = currentDifference;
                         accepted++;
+                        bestSolutionCollector.add(best);
                     }
                 } else {
                     rejected++;
