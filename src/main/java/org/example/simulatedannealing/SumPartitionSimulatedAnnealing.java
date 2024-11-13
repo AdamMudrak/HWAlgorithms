@@ -1,15 +1,14 @@
 package org.example.simulatedannealing;
 
-import org.example.util.CommonFunctionsUtil;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
+import org.example.util.CommonFunctionsUtil;
 
 public class SumPartitionSimulatedAnnealing {
     public static final double ALPHA_COOLING_RATE = 0.995;
-    public final List<Double> allSolutionCollector = new ArrayList<>();
-    public final List<Double> bestSolutionCollector = new ArrayList<>();
+    private final List<Double> allSolutionCollector = new ArrayList<>();
+    private final List<Double> bestSolutionCollector = new ArrayList<>();
     private final Random random = new Random();
     private final double[] set;
 
@@ -20,6 +19,7 @@ public class SumPartitionSimulatedAnnealing {
     public List<Double> getAllSolutionCollector() {
         return allSolutionCollector;
     }
+
     public List<Double> getBestSolutionCollector() {
         return bestSolutionCollector;
     }
@@ -29,7 +29,6 @@ public class SumPartitionSimulatedAnnealing {
         double currentDifference = CommonFunctionsUtil.calculateDifference(set, partition);
         //TRY(x, T) ≈ 0.9 START
         double temperature = findOptimalTemperature(partition, currentDifference);
-        double initialTemperature = temperature;
 
         double best = currentDifference;
         int accepted = 0;
@@ -42,10 +41,10 @@ public class SumPartitionSimulatedAnnealing {
                 int counter = random.nextInt(0, set.length);
                 partition[counter] = !partition[counter];
                 double newDifference = CommonFunctionsUtil.calculateDifference(set, partition);
-                allSolutionCollector.add(newDifference);
                 double delta = newDifference - currentDifference;
                 if (random.nextDouble() < Math.exp(-(delta / temperature))) {
                     currentDifference = newDifference;
+                    allSolutionCollector.add(newDifference);
                     if (newDifference < best) {
                         best = currentDifference;
                         accepted++;
@@ -55,17 +54,17 @@ public class SumPartitionSimulatedAnnealing {
                     rejected++;
                     partition[i] = !partition[i];
                 }
-                if (accepted == set.length || rejected == 2 * set.length) { //не впевнений, чи треба + 1(типу щоб включити в Ne(x) -> current
-                    if (accepted == set.length) {
-                        //T←αT
-                        temperature *= ALPHA_COOLING_RATE;
-                        accepted = 0;
-                    } else if (rejected == 2 * set.length) {
-                        //T←αT
-                        temperature *= ALPHA_COOLING_RATE;
-                        rejected = 0;
-                        quasiEquilibriumOnRejection++;
-                    }
+                if (accepted == set.length) {
+                    quasiEquilibriumOnRejection = 0;
+                    accepted = 0;
+                    rejected = 0;
+                    temperature *= ALPHA_COOLING_RATE;
+                }
+                if (rejected == 2 * set.length) {
+                    accepted = 0;
+                    rejected = 0;
+                    temperature *= ALPHA_COOLING_RATE;
+                    quasiEquilibriumOnRejection++;
                 }
             }
         }
@@ -84,7 +83,8 @@ public class SumPartitionSimulatedAnnealing {
             double checkedTemperature = checkTemperature(partition, currentDifference, temp);
             int successCounter = 0;
             for (int i = 0; i < 100; i++) {
-                if (approximatelyEqual(checkedTemperature, expectedLevelOfAcceptance, toleranceToApproximation)) {
+                if (approximatelyEqual(checkedTemperature, expectedLevelOfAcceptance,
+                        toleranceToApproximation)) {
                     successCounter++;
                 }
                 if (successCounter == 90) {
@@ -92,10 +92,12 @@ public class SumPartitionSimulatedAnnealing {
                 }
             }
         }
-        throw new IllegalArgumentException("No optimal temperature found in the given range. Consider expanding the range or adjusting step size.");
+        throw new IllegalArgumentException("No optimal temperature found in the given range. "
+                + "Consider expanding the range or adjusting step size.");
     }
 
-    private double checkTemperature(boolean[] partition, double currentDifference, double temperature) {
+    private double checkTemperature(boolean[] partition, double currentDifference,
+                                    double temperature) {
         int accepted = 0;
         int tries = set.length;
         for (int i = 0; i < tries; i++) {
