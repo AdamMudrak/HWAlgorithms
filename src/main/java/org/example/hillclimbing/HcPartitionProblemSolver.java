@@ -1,18 +1,21 @@
 package org.example.hillclimbing;
 
-import static org.example.hillclimbing.Db.hillClimbIterationSolutions;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 import org.example.util.CommonFunctionsUtil;
 
 public class HcPartitionProblemSolver {
+    private final List<Double> hillClimbIterationSolutions = new ArrayList<>();
     private final double[] set;
     private final Random random = new Random();
 
     public HcPartitionProblemSolver(double[] set) {
         this.set = set;
+    }
+
+    public List<Double> getHillClimbIterationSolutions() {
+        return hillClimbIterationSolutions;
     }
 
     public List<Double> multiStartHillClimb(int numStarts) {
